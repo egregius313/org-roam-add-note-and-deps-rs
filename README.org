@@ -1,6 +1,9 @@
 #+title: ~org-roam-add-note-and-deps-rs~
 
-*NOTE:* This utility assumes the use of ~org-roam~ v2.
+#+begin_quote
+[!NOTE]
+This utility assumes the use of ~org-roam~ v2.
+#+end_quote
 
 This is a helper utility to make it easier to [[man:git-add(1)][~git add~]] Org roam notes, the
 notes they reference, and associated assets (e.g. photos specified with ~file:~
