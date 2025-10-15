@@ -1,7 +1,14 @@
 use rusqlite::types::{ToSql, FromSql};
 use std::{env::current_dir, path::{Path, PathBuf}};
 
+/// A wrapper around PathBuf to represent a file in the org-roam system.
+///
+/// The path is always absolute.
+///
+/// The path is stored in the database with double quotes around it, so when converting to and from SQL,
+/// we need to add or remove the quotes.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct RoamFile(PathBuf);
 
 impl std::fmt::Display for RoamFile {
