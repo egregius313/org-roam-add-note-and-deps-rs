@@ -1,0 +1,26 @@
+#+title: ~org-roam-add-note-and-deps-rs~
+
+*NOTE: This utility assumes the use of ~org-roam~ v2.~
+
+* ~org-roam-add-note-and-deps-rs~
+
+This is a helper utility to make it easier to [[man:git-add(1)][~git add~]] Org roam notes, the
+notes they reference, and associated assets (e.g. photos specified with ~file:~
+links).
+
+** Usage
+#+begin_src
+Add an org-roam note and all its dependencies to the git repository
+
+Usage: add-note-and-deps [OPTIONS] <FILES>...
+
+Arguments:
+  <FILES>...  Files to start from
+
+Options:
+      --add                    Add files to git index instead of printing them
+      --exclude-unchanged      Only consider files that are new or modified in git
+      --show-all               Show all files, not just modified ones
+      --roam-db <ORG_ROAM_DB>  Path to org-roam database (if not specified, will try to find it in ~/.emacs.d/.local/cache/org-roam.db)
+  -h, --help                   Print help
+#+end_src
