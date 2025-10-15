@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-/// A wrapper around PathBuf to represent a file in the org-roam system.
+/// A wrapper around [`PathBuf`] to represent a file in the org-roam system.
 ///
 /// The path is always absolute.
 ///
