@@ -1,7 +1,7 @@
 #+title: ~org-roam-add-note-and-deps-rs~
 
 #+begin_quote
-[!NOTE]
+[!IMPORTANT]
 This utility assumes the use of ~org-roam~ v2.
 #+end_quote
 
