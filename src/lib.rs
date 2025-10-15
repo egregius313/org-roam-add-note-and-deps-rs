@@ -3,6 +3,7 @@ use std::env::home_dir;
 pub mod git;
 mod roam_file;
 pub use roam_file::RoamFile;
+pub mod references;
 
 pub fn resolve_org_roam_db_path() -> anyhow::Result<std::path::PathBuf> {
     let emacs_cache = home_dir()
