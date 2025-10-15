@@ -1,5 +1,8 @@
-use rusqlite::types::{ToSql, FromSql};
-use std::{env::current_dir, path::{Path, PathBuf}};
+use rusqlite::types::{FromSql, ToSql};
+use std::{
+    env::current_dir,
+    path::{Path, PathBuf},
+};
 
 /// A wrapper around PathBuf to represent a file in the org-roam system.
 ///
@@ -53,14 +56,18 @@ impl ToSql for RoamFile {
 impl FromSql for RoamFile {
     fn column_result(value: rusqlite::types::ValueRef<'_>) -> rusqlite::types::FromSqlResult<Self> {
         #[allow(non_upper_case_globals)]
-        const InvalidType: rusqlite::types::FromSqlError = rusqlite::types::FromSqlError::InvalidType;
+        const InvalidType: rusqlite::types::FromSqlError =
+            rusqlite::types::FromSqlError::InvalidType;
         match value {
             rusqlite::types::ValueRef::Text(s) => {
                 let s = std::str::from_utf8(s).map_err(|_| InvalidType)?;
-                let s = s.strip_prefix('"').ok_or(InvalidType)?
-                    .strip_suffix('"').ok_or(InvalidType)?;
+                let s = s
+                    .strip_prefix('"')
+                    .ok_or(InvalidType)?
+                    .strip_suffix('"')
+                    .ok_or(InvalidType)?;
                 Ok(RoamFile(PathBuf::from(s)))
-            },
+            }
             _ => Err(InvalidType),
         }
     }

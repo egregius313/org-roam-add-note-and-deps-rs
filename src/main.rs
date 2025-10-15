@@ -1,13 +1,13 @@
 //! A tool to add an org-roam note and all its dependencies to the git repository.
-use std::path::PathBuf;
-use std::collections::{VecDeque, HashSet};
 use clap::Parser;
-use log::{info, debug};
+use log::{debug, info};
 use rusqlite::{Connection, Statement};
+use std::collections::{HashSet, VecDeque};
+use std::path::PathBuf;
 
 use add_note_and_deps::{
+    RoamFile,
     git::{find_git_repo, is_modified},
-    RoamFile
 };
 
 /// Add an org-roam note and all its dependencies to the git repository.
@@ -30,7 +30,10 @@ struct Args {
     files: Vec<RoamFile>,
 }
 
-fn find_files_referenced_by(stmt: &mut Statement, path: &RoamFile) -> anyhow::Result<Vec<RoamFile>> {
+fn find_files_referenced_by(
+    stmt: &mut Statement,
+    path: &RoamFile,
+) -> anyhow::Result<Vec<RoamFile>> {
     debug!("Querying for files referenced by {}", path);
     let rows = stmt.query_map([path], |row| {
         let file: RoamFile = row.get(0)?;
@@ -41,7 +44,11 @@ fn find_files_referenced_by(stmt: &mut Statement, path: &RoamFile) -> anyhow::Re
     Ok(results)
 }
 
-fn transitive_closure_of_files(conn: &Connection, paths: &[RoamFile], exclude: impl Fn(&RoamFile) -> bool) -> anyhow::Result<Vec<RoamFile>> {
+fn transitive_closure_of_files(
+    conn: &Connection,
+    paths: &[RoamFile],
+    exclude: impl Fn(&RoamFile) -> bool,
+) -> anyhow::Result<Vec<RoamFile>> {
     let mut stmt = conn.prepare(r#"
         WITH source_file_node AS (SELECT nodes.id from nodes join files on nodes.file = files.file where files.file = ?1),
              referenced_nodes AS (SELECT dest from links, source_file_node where links.source = source_file_node.id and links.type = '"id"')
@@ -86,7 +93,7 @@ fn main() -> anyhow::Result<()> {
 
     let repo = find_git_repo()?;
     info!("Found git repository at {}", repo.path().display());
-    
+
     let db_path = add_note_and_deps::resolve_org_roam_db_path()?;
     info!("Using org-roam database at {}", db_path.display());
 
