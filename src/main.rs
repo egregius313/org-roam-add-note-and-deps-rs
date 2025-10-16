@@ -56,10 +56,12 @@ fn main() -> anyhow::Result<()> {
     if args.add {
         let mut index = repo.index()?;
         for file in notes {
-            index.add_path(file.as_ref())?;
+            let path = file.as_ref().strip_prefix(repo.workdir().unwrap()).unwrap();
+            index.add_path(path)?;
         }
         for file in assets {
-            index.add_path(&file)?;
+            let path = file.strip_prefix(repo.workdir().unwrap()).unwrap();
+            index.add_path(path)?;
         }
         index.write()?;
     } else {
